@@ -1,6 +1,8 @@
 # PdfService
 
-Foobar is a Python library for dealing with word pluralization.
+all names for db, aws and other is stored in /config/config.js. You need a bd with collection inside. Other things
+
+you may need described in Prerequisite
 
 ## Installation
 
@@ -11,17 +13,18 @@ yarn install
 ```
 
 ## Prerequisite
+
 ```
 node >= 7.x
 graphicsmagick
 ghostscript
 mongoDb installed
- ```
+```
 
 ## Usefull information
 
-u could change /config/config.js for your aws urls, bucket and etc.
-
+You could run mongo with docker-compose up.
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)

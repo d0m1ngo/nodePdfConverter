@@ -6,18 +6,25 @@ const folderName = path.join(__dirname, `../images`);
 const PDF2Pic = require("pdf2pic");
 const downloadBucket = require("config").get("downloadBucket");
 const pdf = require("pdf-parse");
+const pdfModel = require("../models/pdfModel");
+const mongoose = require("mongoose");
+const getfileSize = require("../helpers/fileSize");
 
 const saveAndConvert = file => {
   return new Promise(async (res, rej) => {
+    const id = mongoose.Types.ObjectId();
+
     const fileName = fileDest(file);
 
     await s3.fGetObject(downloadBucket, file, fileName);
 
     const dataBuffer = fs.readFileSync(fileName);
 
-    pdf(dataBuffer).then(function(data) {
-      console.log(data.numpages);
-    });
+    const fileSize = await getfileSize(fileName);
+
+    const pdfMetadata = await pdf(dataBuffer);
+
+    await pdfModel.create({ _id: id, fileName: file, fileSize, numberOfPages: pdfMetadata.numpages, processStatus: "new" });
 
     const pdf2pic = new PDF2Pic({
       density: 100,
@@ -27,10 +34,13 @@ const saveAndConvert = file => {
       size: "600x600"
     });
 
-    pdf2pic.convertBulk(fileName, -1).then(resolve => {
-      res();
-      return resolve;
-    });
+    await pdfModel.updateOne({ _id: id }, { processStatus: "in progress" });
+
+    const pics = await pdf2pic.convertBulk(fileName, -1);
+
+    await pdfModel.updateOne({ _id: id }, { pics });
+
+    res(id);
   });
 };
 
