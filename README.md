@@ -1,6 +1,6 @@
 # PdfService
 
-all names for db, aws and other is stored in /config/config.js. You need a bd with collection inside. Other things
+all names for db, object storage and others is stored in /config/config.js. You need a bd with collection inside. Other things
 
 you may need described in Prerequisite
 
