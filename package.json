@@ -20,7 +20,7 @@
   "dependencies": {
     "config": "^3.2.2",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "install": "^0.13.0",
     "minio": "^7.0.12",
     "npm": "^6.11.0",
